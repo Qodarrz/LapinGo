@@ -6,7 +6,7 @@ module.exports = {
       host: 'dbpplg.smkn4bogor.sch.id',
       user: 'pplg',
       password: 'adminpplg2025!',
-      database: 'simajukuy_user',
+      database: 'lapingo_user',
       port: 6093,
     },
     migrations: {
@@ -14,4 +14,3 @@ module.exports = {
     },
   },
 };
-//mysql -h nozomi.proxy.rlwy.net -u root -p BoKvzwOmSrEwAGEgWNnzsZcgBqpCMtRG --port 50887 --protocol=TCP railway
