@@ -16,11 +16,29 @@ export class AchievementRoute {
 
   initializeRoutes() {
     // Perbaikan: Menggunakan instance controller yang sudah dibuat
-    this.router.get("/", this.achievementController.getAllAchievements.bind(this.achievementController));
-    this.router.get("/user/:user_id", this.achievementController.getUserAchievements.bind(this.achievementController));
-    
+    this.router.get(
+      "/",
+      this.authMiddleware.verifyToken,
+      this.achievementController.getAllAchievements.bind(
+        this.achievementController
+      )
+    );
+    this.router.get(
+      "/user/:user_id",
+      this.authMiddleware.verifyToken,
+      this.achievementController.getUserAchievements.bind(
+        this.achievementController
+      )
+    );
+    this.router.get(
+      "/badge/:user_id",
+      this.authMiddleware.verifyToken,
+      this.achievementController.getUserBadges.bind(this.achievementController)
+    );
+
     // Perbaikan: Menggunakan middleware dengan benar
-    this.router.post("/sync", 
+    this.router.post(
+      "/sync",
       (req, res, next) => this.authMiddleware.verifyToken(req, res, next),
       this.achievementController.syncUserStats.bind(this.achievementController)
     );

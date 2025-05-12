@@ -35,7 +35,7 @@ export class UsersRouter {
 
     this.router.post(
       "/update/:id",
-      this.usersController.updateUsersPublic,
+      this.usersController.updateUsers,
       this.authMiddleware.verifyToken
     );
 

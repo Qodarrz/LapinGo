@@ -86,6 +86,38 @@ export class AchievementController {
     }
   }
 
+  async getUserBadges(req, res) {
+  try {
+    const { user_id } = req.params;
+    const { limit } = req.query; // Optional limit parameter
+
+    const query = `
+      SELECT 
+        b.*,
+        ub.earned_at,
+        ub.is_featured
+      FROM user_badges ub
+      JOIN badges b ON ub.badge_id = b.badge_id
+      WHERE ub.user_id = ?
+      ORDER BY ub.earned_at DESC
+      ${limit ? `LIMIT ${parseInt(limit)}` : ''}
+    `;
+
+    const [badges] = await this.pool.query(query, [user_id]);
+    
+    res.json({
+      success: true,
+      data: badges
+    });
+  } catch (error) {
+    console.error("Error getting user badges:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to get user badges" 
+    });
+  }
+}
+
   async syncUserStats(req, res) {
     const conn = await this.pool.getConnection();
     try {
@@ -260,7 +292,6 @@ export class AchievementController {
         const currentCount = userStats[0][statField] || 0;
         const requiredCount = achievement.required_count;
 
-        // Check if achievement is already unlocked
         const [existing] = await conn.query(
           `SELECT * FROM user_achievements 
            WHERE user_id = ? AND achievement_id = ?`,
