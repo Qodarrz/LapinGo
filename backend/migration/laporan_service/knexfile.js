@@ -6,7 +6,7 @@ module.exports = {
       host: 'dbpplg.smkn4bogor.sch.id',
       user: 'pplg',
       password: 'adminpplg2025!',
-      database: 'simajukuy_laporan',
+      database: 'lapingo_laporan',
       port: 6093,
     },
     migrations: {

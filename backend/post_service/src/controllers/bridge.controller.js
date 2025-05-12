@@ -29,7 +29,7 @@ export class BridgeController {
     } catch (error) {
       return res.status(500).json({ message: error.message });
     } finally {
-      connection.release(); // Release connection back to the pool
+      connection.release();
     }
   }
 

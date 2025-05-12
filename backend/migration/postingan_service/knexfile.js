@@ -6,7 +6,7 @@ module.exports = {
       host: 'dbpplg.smkn4bogor.sch.id',
       user: 'pplg',
       password: 'adminpplg2025!',
-      database: 'simajukuy_post',
+      database: 'lapingo_postingan',
       port: 6093,
       connectTimeout: 200000,
     },
@@ -14,14 +14,13 @@ module.exports = {
       directory: './migrations',
     },
   },
-  // mysql -h turntable.proxy.rlwy.net -u root -p ciXFaQEspTttnKcKDyNOPonpVGpXzaWI --port 45766 --protocol=TCP railway
   production: {
     client: 'mysql2',
     connection: {
       host: 'dbpplg.smkn4bogor.sch.id',
       user: 'pplg',
       password: 'adminpplg2025!',
-      database: 'simajukuy_post',
+      database: 'lapingo_postingan',
       port: 6093,
       connectTimeout: 200000,
     },

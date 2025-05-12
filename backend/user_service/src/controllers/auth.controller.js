@@ -35,12 +35,6 @@ export class AuthController {
         [email, hashedPassword, username, avatar ?? 'https://i.pinimg.com/736x/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg', "guest"]
       );
   
-      // Insert koin default
-      await connection.query(
-        "INSERT INTO koin (user_id, amount) VALUES (?, ?)", 
-        [insertResult.insertId, 0]
-      );
-  
       return res.status(201).json({ message: "Register success, please login" });
     } catch (err) {
       console.error("Database error:", err);

@@ -131,6 +131,14 @@ export class PostRouter {
       this.authMiddleware.verifyToken,
       ReportController.updateReportStatus
     );
+
+    // collect buat avihment
+
+    this.router.get(
+      "/count/user/:user_id",
+      this.authMiddleware.verifyToken,
+      PostController.getUserActivitySummary
+    );
   }
 
   /**

@@ -196,7 +196,9 @@ export class PostController {
 
       const fetchUser = async (id) => {
         try {
-          const res = await fetch(`${process.env.USER_SERVICE}/api/users/`);
+          const res = await fetch(
+            `${process.env.USER_SERVICE}/api/users/${id}`
+          );
           const data = await res.json();
           return data;
         } catch (e) {
@@ -578,6 +580,81 @@ export class PostController {
     } catch (error) {
       if (connection) await connection.rollback();
       return res.status(500).json({ message: error.message });
+    } finally {
+      if (connection) connection.release();
+    }
+  }
+
+  static async getUserActivitySummary(req, res) {
+    let connection;
+    try {
+      const { user_id } = req.params;
+      connection = await pool.getConnection();
+
+      // 1. Hitung semua aktivitas dalam satu query
+      const [activitySummary] = await connection.query(
+        `
+        SELECT
+          /* Postingan */
+          (SELECT COUNT(*) FROM postingan WHERE user_id = ?) AS total_posts,
+          (SELECT COUNT(*) FROM postingan WHERE user_id = ? AND type = 'text') AS text_posts,
+          (SELECT COUNT(*) FROM postingan WHERE user_id = ? AND type = 'image') AS image_posts,
+          (SELECT COUNT(*) FROM postingan WHERE user_id = ? AND type = 'video') AS video_posts,
+          (SELECT COUNT(*) FROM postingan WHERE user_id = ? AND type = 'polling') AS polling_posts,
+          
+          /* Interaksi */
+          (SELECT COUNT(*) FROM postingan_likes WHERE user_id = ?) AS total_likes_given,
+          (SELECT COUNT(*) FROM postingan_comments WHERE user_id = ?) AS total_comments,
+          (SELECT COUNT(*) FROM postingan_comment_replies WHERE user_id = ?) AS total_replies,
+          
+          /* Laporan & Voting */
+          (SELECT COUNT(*) FROM postingan_reports WHERE user_id = ?) AS total_reports,
+          (SELECT COUNT(*) FROM postingan_polling_votes WHERE user_id = ?) AS total_votes,
+          
+          /* Stats Tambahan */
+          (SELECT COUNT(*) FROM postingan_likes 
+           WHERE post_id IN (SELECT id FROM postingan WHERE user_id = ?)) AS total_likes_received,
+          (SELECT COUNT(*) FROM postingan_comments 
+           WHERE post_id IN (SELECT id FROM postingan WHERE user_id = ?)) AS total_post_comments_received
+      `,
+        Array(12).fill(user_id) // Isi semua parameter dengan user_id
+      );
+
+      // 2. Format response
+      const result = {
+        user_id,
+        posts: {
+          total: activitySummary[0].total_posts,
+          by_type: {
+            text: activitySummary[0].text_posts,
+            image: activitySummary[0].image_posts,
+            video: activitySummary[0].video_posts,
+            polling: activitySummary[0].polling_posts,
+          },
+        },
+        interactions: {
+          likes_given: activitySummary[0].total_likes_given,
+          likes_received: activitySummary[0].total_likes_received,
+          comments: activitySummary[0].total_comments,
+          replies: activitySummary[0].total_replies,
+          comments_on_posts: activitySummary[0].total_post_comments_received,
+        },
+        community: {
+          reports: activitySummary[0].total_reports,
+          poll_votes: activitySummary[0].total_votes,
+        },
+      };
+
+      res.json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      console.error("[ACTIVITY] Summary error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to get activity summary",
+      });
     } finally {
       if (connection) connection.release();
     }

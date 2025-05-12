@@ -1,8 +1,4 @@
 exports.up = async function (knex) {
-  await knex.schema
-    .dropTableIfExists("transaction_koin")
-    .dropTableIfExists("koin");
-
   await knex.schema.dropTableIfExists("users").createTable("users", (table) => {
     table.increments("user_id").primary();
     table.string("username").notNullable().unique();
@@ -37,99 +33,65 @@ exports.up = async function (knex) {
     table.string("name").notNullable();
     table.text("description").notNullable();
     table.string("icon").notNullable();
-    table.string("criteria").notNullable();
+    table.string("criteria_type").notNullable(); // e.g., 'post_count', 'like_received'
+    table.string("criteria_subtype").nullable(); // e.g., 'image', 'video' for posts
     table.integer("required_count").notNullable();
-    table
-      .integer("badge_id")
-      .unsigned()
-      .nullable()
-      .references("badge_id")
-      .inTable("badges")
-      .onDelete("SET NULL");
-    table.integer("xp_reward").notNullable().defaultTo(50); // Experience yang diberikan
+    table.integer("badge_id").unsigned().nullable().references("badge_id").inTable("badges");
+    table.integer("xp_reward").notNullable().defaultTo(50);
     table.timestamp("created_at").defaultTo(knex.fn.now());
     table.timestamp("updated_at").defaultTo(knex.fn.now());
   });
 
   await knex.schema.createTable("user_achievements", (table) => {
     table.increments("id").primary();
-    table
-      .integer("user_id")
-      .unsigned()
-      .notNullable()
-      .references("user_id")
-      .inTable("users")
-      .onDelete("CASCADE");
-    table
-      .integer("achievement_id")
-      .unsigned()
-      .notNullable()
-      .references("achievement_id")
-      .inTable("achievements")
-      .onDelete("CASCADE");
+    table.integer("user_id").unsigned().notNullable().references("user_id").inTable("users").onDelete("CASCADE");
+    table.integer("achievement_id").unsigned().notNullable().references("achievement_id").inTable("achievements").onDelete("CASCADE");
     table.integer("progress").notNullable().defaultTo(0);
     table.boolean("unlocked").notNullable().defaultTo(false);
     table.timestamp("unlocked_at").nullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
     table.timestamp("updated_at").defaultTo(knex.fn.now());
-
     table.unique(["user_id", "achievement_id"]);
   });
 
-  // Buat tabel user_badges
   await knex.schema.createTable("user_badges", (table) => {
     table.increments("id").primary();
-    table
-      .integer("user_id")
-      .unsigned()
-      .notNullable()
-      .references("user_id")
-      .inTable("users")
-      .onDelete("CASCADE");
-    table
-      .integer("badge_id")
-      .unsigned()
-      .notNullable()
-      .references("badge_id")
-      .inTable("badges")
-      .onDelete("CASCADE");
+    table.integer("user_id").unsigned().notNullable().references("user_id").inTable("users").onDelete("CASCADE");
+    table.integer("badge_id").unsigned().notNullable().references("badge_id").inTable("badges").onDelete("CASCADE");
     table.timestamp("earned_at").defaultTo(knex.fn.now());
     table.boolean("is_featured").defaultTo(false);
-
     table.unique(["user_id", "badge_id"]);
   });
 
-  // Buat tabel user_activities untuk tracking aktivitas
   await knex.schema.createTable("user_activities", (table) => {
     table.increments("id").primary();
-    table
-      .integer("user_id")
-      .unsigned()
-      .notNullable()
-      .references("user_id")
-      .inTable("users")
-      .onDelete("CASCADE");
-    table.string("activity_type").notNullable(); // 'create_post', 'submit_report', dll
+    table.integer("user_id").unsigned().notNullable().references("user_id").inTable("users").onDelete("CASCADE");
+    table.string("activity_type").notNullable();
     table.jsonb("metadata").nullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
   });
 
-  // Buat tabel user_stats untuk menyimpan progress
   await knex.schema.createTable("user_stats", (table) => {
     table.increments("id").primary();
-    table
-      .integer("user_id")
-      .unsigned()
-      .notNullable()
-      .references("user_id")
-      .inTable("users")
-      .onDelete("CASCADE")
-      .unique();
+    table.integer("user_id").unsigned().notNullable().references("user_id").inTable("users").onDelete("CASCADE").unique();
+    // Post stats
     table.integer("post_count").defaultTo(0);
-    table.integer("report_count").defaultTo(0);
-    table.integer("comment_count").defaultTo(0);
-    table.integer("total_xp").defaultTo(0); // Total experience points
-    table.integer("level").defaultTo(1); // Level user berdasarkan XP
+    table.integer("text_post_count").defaultTo(0);
+    table.integer("image_post_count").defaultTo(0);
+    table.integer("video_post_count").defaultTo(0);
+    table.integer("polling_post_count").defaultTo(0);
+    // Interaction stats
+    table.integer("likes_given").defaultTo(0);
+    table.integer("likes_received").defaultTo(0);
+    table.integer("comments_given").defaultTo(0);
+    table.integer("comments_received").defaultTo(0);
+    table.integer("replies_given").defaultTo(0);
+    // Community stats
+    table.integer("reports_given").defaultTo(0);
+    table.integer("poll_votes_given").defaultTo(0);
+    // Level and XP
+    table.integer("total_xp").defaultTo(0);
+    table.integer("level").defaultTo(1);
     table.timestamp("created_at").defaultTo(knex.fn.now());
     table.timestamp("updated_at").defaultTo(knex.fn.now());
   });
