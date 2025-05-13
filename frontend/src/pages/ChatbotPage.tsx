@@ -1,4 +1,4 @@
-import { ChevronLeft, MoreVertical, Search, Send } from "lucide-react";
+import { ChevronLeft, MoreVertical, Send } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 

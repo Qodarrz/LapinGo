@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Header from "../components/Navigations/Header";
 import { Link } from "react-router-dom";
+import ChatBot from "../components/ChatBot";
 
 const dummyReports = [
     {
@@ -71,6 +72,8 @@ export default function ReportPage() {
                     ))}
                 </div>
             </div>
+
+            <ChatBot />
         </div>
     );
 }

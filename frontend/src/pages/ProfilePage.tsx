@@ -1,5 +1,6 @@
 import { Bell, ChevronRight, CircleHelp, Edit, Palette, Share2, UserPen } from "lucide-react";
 import { Link } from "react-router-dom";
+import ChatBot from "../components/ChatBot";
 
 const menuItems = [
     { label: "Edit Akun", icon: <UserPen size={32} />, link: "/edit-akun" },
@@ -71,6 +72,8 @@ export default function ProfilePage() {
                     </Link>
                 ))}
             </div>
+
+            <ChatBot />
         </div>
     )
 }
