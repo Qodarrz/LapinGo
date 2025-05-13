@@ -1,20 +1,14 @@
-import { useState } from "react";
-import ChatBotButton from "./ChatBotButton";
-import ChatBotModal from "./modals/ChatBotModal";
-import { AnimatePresence } from "framer-motion";
+import { MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function ChatBot() {
-    const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <>
-            <ChatBotButton onClick={() => setIsOpen((prev) => !prev)} />
-
-            <AnimatePresence>
-                {isOpen && (
-                    <ChatBotModal onClose={() => setIsOpen(false)} />
-                )}
-            </AnimatePresence>
-        </>
+        <Link
+            to={"/chatbot"}
+            className="fixed bottom-28 right-6 z-50 bg-primary text-textDark rounded-full p-4 shadow-lg hover:scale-105 transition-transform"
+        >
+            <MessageCircle className="w-6 h-6" />
+        </Link>
     );
 }

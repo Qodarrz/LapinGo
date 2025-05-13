@@ -30,12 +30,12 @@ export default function NotificationWidget() {
     }, []);
 
     return (
-        <div className="relative hidden md:block" ref={notifRef}>
+        <div className="relative" ref={notifRef}>
             <button
                 onClick={() => {
                     setShowNotif(!showNotif);
                 }}
-                className="text-text dark:text-textDark"
+                className="text-text"
             >
                 <Bell size={24} />
             </button>
@@ -45,10 +45,10 @@ export default function NotificationWidget() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-tertiary dark:bg-tertiaryDark rounded-xl shadow-lg p-4 z-10 custom-scrollbar"
+                        className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-secondary rounded-xl shadow-lg p-4 z-10 custom-scrollbar"
                     >
-                        <h2 className="text-text dark:text-textDark font-semibold mb-3">Notifikasi</h2>
-                        <ul className="space-y-2 text-sm text-text dark:text-textDark">
+                        <h2 className="text-text font-semibold mb-3">Notifikasi</h2>
+                        <ul className="space-y-2 text-sm text-text">
                             {dummyNotifications.map(notif => (
                                 <li
                                     key={notif.id}

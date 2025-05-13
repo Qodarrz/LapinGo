@@ -16,7 +16,7 @@ export default function SearchBar({ value, onChange, placeHolder }: SearchBarPro
         <div className="w-full relative">
             <input
                 type="text"
-                className="w-full px-12 py-3 rounded-xl bg-tertiary placeholder-transparent dark:bg-tertiaryDark focus:outline-none focus:ring-2 focus:ring-accent text-textBody dark:text-textBodyDark"
+                className="w-full px-12 py-3 rounded-xl border border-text placeholder-transparent text-textBody"
                 value={value}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
@@ -31,7 +31,7 @@ export default function SearchBar({ value, onChange, placeHolder }: SearchBarPro
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{duration: 0.1, ease: "easeInOut"}}
-                        className="absolute left-4 top-3 text-textBody dark:text-textBodyDark pointer-events-none"
+                        className="absolute left-4 top-3 text-textBody pointer-events-none"
                     >
                         {placeHolder}
                     </motion.span>
@@ -45,7 +45,7 @@ export default function SearchBar({ value, onChange, placeHolder }: SearchBarPro
                     right: isActive ? 'auto' : '1rem'
                 }}
                 transition={{ duration: 0.2, ease: "easeIn" }}
-                className="absolute top-3 text-textBody dark:text-textBodyDark"
+                className="absolute top-3 text-textBody"
             >
                 <Search size={20} />
             </motion.div>

@@ -51,12 +51,12 @@ export default function PostForm() {
         formData.append('content', postContent?.toString() ?? '');
         formData.append('type', selectedImage ? 'image' : "text");
         // console.log(formData)
-        
+
         try {
             if (selectedImage !== null) {
-                 
+
                 formData.append('image', selectedImage ?? null);
-                
+
                 const res = await fetch(`${import.meta.env.VITE_POST_SERVICE}/api/postingan/create`, {
                     method: "POST",
                     headers: {
@@ -64,13 +64,13 @@ export default function PostForm() {
                     },
                     body: formData
                 })
-    
+
                 if (!res?.ok) {
                     console.error(res)
                     Swal.fire({
-                      title: "Gagal Membuat Postingan",
-                      text: "Terjadi kesalahan saat menghubungi server.",
-                      icon: "error",
+                        title: "Gagal Membuat Postingan",
+                        text: "Terjadi kesalahan saat menghubungi server.",
+                        icon: "error",
                     });
                     return
                 }
@@ -79,10 +79,10 @@ export default function PostForm() {
                     title: "Berhasil Membuat Postingan",
                     text: "Postingan berhasil dibuat.",
                     icon: "success",
-                  });
+                });
                 return
             }
-            
+
             const res = await fetch(`${import.meta.env.VITE_POST_SERVICE}/api/postingan/create`, {
                 method: "POST",
                 headers: {
@@ -90,20 +90,20 @@ export default function PostForm() {
                 },
                 body: formData
             })
-    
+
             if (!res?.ok) {
                 Swal.fire({
-                  title: "Gagal Membuat Postingan",
-                  text: "Terjadi kesalahan saat menghubungi server.",
-                  icon: "error",
+                    title: "Gagal Membuat Postingan",
+                    text: "Terjadi kesalahan saat menghubungi server.",
+                    icon: "error",
                 });
                 return
             }
 
             Swal.fire({
-              title: "Berhasil Membuat Postingan",
-              text: "Postingan berhasil dibuat.",
-              icon: "success",
+                title: "Berhasil Membuat Postingan",
+                text: "Postingan berhasil dibuat.",
+                icon: "success",
             });
         } catch (e) {
             console.error(e)

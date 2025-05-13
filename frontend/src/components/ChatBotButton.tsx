@@ -8,7 +8,7 @@ export default function ChatBotButton({ onClick }: ChatBotButtonProps) {
     return (
         <button
             onClick={onClick}
-            className="fixed bottom-6 right-6 z-50 bg-primary dark:bg-primaryDark text-textDark rounded-full p-4 shadow-lg hover:scale-105 transition-transform"
+            className="fixed bottom-28 right-6 z-50 bg-primary text-textDark rounded-full p-4 shadow-lg hover:scale-105 transition-transform"
         >
             <MessageCircle className="w-6 h-6" />
         </button>

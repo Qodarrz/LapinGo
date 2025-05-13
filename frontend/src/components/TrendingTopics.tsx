@@ -1,19 +1,23 @@
-const dummyTrends = ["#SampahKota", "#WiFiTaman", "#LampuJalan", "#Macet"];
-
 export default function TrendingTopics() {
+    const topics = [
+        "#Sampah Kota",
+        "#WifiTaman",
+        "#Macet",
+        "#JalanJebol",
+        "#BuangSampahSungai",
+    ];
+
     return (
-        <div className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">Tren Topik</h2>
+        <>
+            <h1 className="text-lg font-bold">Topik yang lagi Trend</h1>
             <div className="flex flex-wrap gap-2">
-                {dummyTrends.map((trend) => (
-                    <span
-                        key={trend}
-                        className="text-sm bg-tertiary dark:bg-tertiaryDark px-3 py-1 rounded-full"
-                    >
-                        {trend}
-                    </span>
+                <button className="bg-primary text-white px-4 py-1 rounded-full text-sm">Semua</button>
+                {topics.map((topic, index) => (
+                    <button key={index} className="border border-primary text-primary px-4 py-1 rounded-full text-sm hover:text-white hover:bg-primary">
+                        {topic}
+                    </button>
                 ))}
             </div>
-        </div>
+        </>
     );
 }
