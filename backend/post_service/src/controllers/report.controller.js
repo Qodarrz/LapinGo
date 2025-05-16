@@ -1,9 +1,7 @@
 import pool from "../services/db.js";
 
 export class ReportController {
-  /**
-   * Report a post
-   */
+
   static async reportPost(req, res) {
     let connection;
     try {
@@ -18,7 +16,6 @@ export class ReportController {
 
       await connection.beginTransaction();
 
-      // Check if the post exists in the reporting table
       const [existingReport] = await connection.query(
         "SELECT id FROM postingan_reports WHERE post_id = ? AND user_id = ?",
         [post_id, user_id]
@@ -29,7 +26,6 @@ export class ReportController {
         return res.status(400).json({ message: "You already reported this post" });
       }
 
-      // Create report
       await connection.query(
         "INSERT INTO postingan_reports (post_id, user_id, reason) VALUES (?, ?, ?)",
         [post_id, user_id, reason]
@@ -45,9 +41,6 @@ export class ReportController {
     }
   }
 
-  /**
-   * Get all reports (Admin only)
-   */
   static async getAllReports(req, res) {
     let connection;
     try {
@@ -74,9 +67,6 @@ export class ReportController {
     }
   }
 
-  /**
-   * Update report status (Admin only)
-   */
   static async updateReportStatus(req, res) {
     let connection;
     try {
@@ -116,9 +106,6 @@ export class ReportController {
     }
   }
 
-  /**
-   * Get reports for a specific post (Admin/Moderator)
-   */
   static async getPostReports(req, res) {
     let connection;
     try {

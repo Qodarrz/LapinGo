@@ -650,7 +650,7 @@ export class PostController {
         data: result,
       });
     } catch (error) {
-      console.error("[ACTIVITY] Summary error:", error);
+      console.error("[ACTIVITY] Summary error:", result);
       res.status(500).json({
         success: false,
         message: "Failed to get activity summary",

@@ -60,14 +60,12 @@ export class UsersController {
       connection = await pool.getConnection();
       await connection.beginTransaction();
 
-      // Insert user
       const hashedPass = await hashPass(password);
       const [userResult] = await connection.query(
         "INSERT INTO users (username, first_name, last_name, email, phone, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [username, first_name, last_name, email, phone, hashedPass, role]
       );
 
-      // Insert koin
       await connection.query(
         "INSERT INTO koin (user_id, amount) VALUES (?, ?)",
         [userResult.insertId, 0]
@@ -96,7 +94,7 @@ export class UsersController {
     }
   }
 
-  async updateUsersPublic(req, res) {
+  async updateUsers(req, res) {
     let connection;
     try {
       const { username, firstName, lastName, avatar, phone } = req.body;
